@@ -89,6 +89,21 @@
 		}
 	}
 
+	function initializeBox(box) {
+		if (!box || box.dataset.fqpInitialized === 'yes') {
+			return;
+		}
+		box.dataset.fqpInitialized = 'yes';
+		if (box.dataset.fqpPayload) {
+			try {
+				current = JSON.parse(box.dataset.fqpPayload);
+			} catch (error) {
+				// Keep the localized product payload as the fallback.
+			}
+		}
+		update(box);
+	}
+
 	function setPayload(payload) {
 		if (payload && payload.enabled) {
 			current = payload;
@@ -103,19 +118,16 @@
 	}
 
 	document.addEventListener('DOMContentLoaded', function () {
+		document.querySelectorAll('[data-fqp-pricing]').forEach(initializeBox);
 		var box = document.querySelector('[data-fqp-pricing]');
-		if (!box) {
-			return;
-		}
-		update(box);
 		document.addEventListener('input', function (event) {
 			if (event.target.matches('form.cart input.qty')) {
-				update(box);
+				document.querySelectorAll('[data-fqp-pricing]').forEach(update);
 			}
 		});
 		document.addEventListener('change', function (event) {
 			if (event.target.matches('form.cart input.qty')) {
-				update(box);
+				document.querySelectorAll('[data-fqp-pricing]').forEach(update);
 			}
 		});
 
@@ -125,6 +137,11 @@
 			}).on('reset_data hide_variation', function () {
 				setPayload(window.fqpData.product);
 			});
+		}
+		if (window.MutationObserver) {
+			new MutationObserver(function () {
+				document.querySelectorAll('[data-fqp-pricing]').forEach(initializeBox);
+			}).observe(document.body, { childList: true, subtree: true });
 		}
 	});
 }());

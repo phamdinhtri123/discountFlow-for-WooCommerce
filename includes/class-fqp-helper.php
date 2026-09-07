@@ -192,20 +192,20 @@ final class FQP_Helper {
 		}
 
 		usort( $ranges, static fn( array $a, array $b ): int => $a['min'] <=> $b['min'] );
-		$last_max = 1;
-		$unlimited_seen = false;
+		$previous = null;
 
 		foreach ( $ranges as $range ) {
-			if ( $unlimited_seen || $range['min'] <= $last_max ) {
-				$messages[] = __( 'Quantity Pricing tiers cannot overlap. Overlapping rows were ignored when saving.', 'frpsych-quantity-pricing' );
-				break;
+			if ( null !== $previous && ( null === $previous['max'] || $range['min'] <= $previous['max'] ) ) {
+				$messages[] = sprintf(
+					__( 'Quantity Pricing rows %1$d and %2$d overlap. Use adjacent ranges such as 2-9 and 10-20; leave Max Qty blank only on the final tier.', 'frpsych-quantity-pricing' ),
+					$previous['row'],
+					$range['row']
+				);
+				$previous = $range;
+				continue;
 			}
 
-			if ( null === $range['max'] ) {
-				$unlimited_seen = true;
-			} else {
-				$last_max = $range['max'];
-			}
+			$previous = $range;
 		}
 
 		return array_unique( $messages );

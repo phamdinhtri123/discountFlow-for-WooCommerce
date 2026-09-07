@@ -4,7 +4,7 @@ Tags: woocommerce, quantity pricing, bulk discounts, variable products
 Requires at least: 6.5
 Tested up to: 6.6
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 
 Per-product quantity-based tier pricing for WooCommerce.
@@ -44,6 +44,9 @@ The ZIP should contain the top-level DiscountFlow for WooCommerce folder directl
 Existing product settings are stored as product meta and are not deleted during normal plugin updates.
 
 == Changelog ==
+
+= 1.0.1 =
+Added Function Short code
 
 = 1.0.0 =
 Initial release.

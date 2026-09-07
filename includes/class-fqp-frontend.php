@@ -8,12 +8,13 @@
 defined( 'ABSPATH' ) || exit;
 
 final class FQP_Frontend {
-	private static bool $rendered = false;
+	private static array $rendered = array();
 
 	public static function init(): void {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 		add_action( 'wp', array( __CLASS__, 'register_positioned_hooks' ) );
 		add_filter( 'woocommerce_available_variation', array( __CLASS__, 'add_variation_payload' ), 10, 3 );
+		add_shortcode( 'fqp_pricing_table', array( __CLASS__, 'shortcode' ) );
 	}
 
 	public static function register_positioned_hooks(): void {
@@ -39,14 +40,14 @@ final class FQP_Frontend {
 	}
 
 	public static function enqueue_assets(): void {
-		if ( ! is_product() ) {
+		if ( ! class_exists( 'WooCommerce' ) ) {
 			return;
 		}
 
 		wp_enqueue_style( 'fqp-frontend', FQP_PLUGIN_URL . 'assets/css/frontend.css', array(), FQP_VERSION );
 		wp_enqueue_script( 'fqp-frontend', FQP_PLUGIN_URL . 'assets/js/frontend.js', array(), FQP_VERSION, true );
 
-		$product = wc_get_product( get_the_ID() );
+		$product = is_product() ? wc_get_product( get_the_ID() ) : false;
 		$payload = $product ? FQP_Helper::get_product_payload( $product ) : array();
 
 		wp_localize_script(
@@ -72,18 +73,18 @@ final class FQP_Frontend {
 		);
 	}
 
-	public static function render_pricing_table(): void {
-		if ( self::$rendered ) {
-			return;
-		}
-
+	public static function render_pricing_table( ?WC_Product $target_product = null ): void {
 		global $product;
+		$product = $target_product instanceof WC_Product ? $target_product : $product;
 
 		if ( ! $product instanceof WC_Product || $product->is_sold_individually() ) {
 			return;
 		}
 
 		$product_id = $product->get_id();
+		if ( isset( self::$rendered[ $product_id ] ) ) {
+			return;
+		}
 		if ( ! self::product_has_rules( $product ) ) {
 			return;
 		}
@@ -93,8 +94,8 @@ final class FQP_Frontend {
 			return;
 		}
 
-		self::$rendered = true;
 		$payload = FQP_Helper::get_product_payload( $product );
+		self::$rendered[ $product_id ] = true;
 		$parent_has_rules = FQP_Helper::is_enabled( $product_id ) && ! empty( FQP_Helper::get_pricing_tiers( $product_id ) );
 
 		$style = sprintf(
@@ -104,7 +105,7 @@ final class FQP_Frontend {
 		);
 
 		do_action( 'fqp_before_pricing_table', $product );
-		echo '<div class="fqp-pricing-box" data-fqp-pricing style="' . esc_attr( $style ) . '">';
+		echo '<div class="fqp-pricing-box" data-fqp-pricing data-fqp-payload="' . esc_attr( wp_json_encode( $payload ) ) . '" style="' . esc_attr( $style ) . '">';
 		echo '<h3 class="fqp-heading">' . esc_html( $settings['heading'] ) . '</h3>';
 		if ( '' !== $settings['description'] ) {
 			echo '<p class="fqp-description">' . esc_html( $settings['description'] ) . '</p>';
@@ -129,6 +130,19 @@ final class FQP_Frontend {
 		echo '<div class="fqp-savings-row" data-fqp-savings></div>';
 		echo '</div></div>';
 		do_action( 'fqp_after_pricing_table', $product );
+	}
+
+	public static function shortcode( array $atts = array() ): string {
+		$atts = shortcode_atts( array( 'product_id' => 0 ), $atts, 'fqp_pricing_table' );
+		$product = absint( $atts['product_id'] ) ? wc_get_product( absint( $atts['product_id'] ) ) : wc_get_product( get_the_ID() );
+
+		if ( ! $product instanceof WC_Product ) {
+			return '';
+		}
+
+		ob_start();
+		self::render_pricing_table( $product );
+		return (string) ob_get_clean();
 	}
 
 	private static function product_has_rules( WC_Product $product ): bool {

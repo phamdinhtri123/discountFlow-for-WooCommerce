@@ -14,6 +14,56 @@ final class FQP_Updater {
 	public static function init(): void {
 		add_filter( 'pre_set_site_transient_update_plugins', array( __CLASS__, 'check_for_update' ) );
 		add_filter( 'plugins_api', array( __CLASS__, 'plugin_info' ), 20, 3 );
+		add_filter( 'plugin_action_links_' . FQP_PLUGIN_BASENAME, array( __CLASS__, 'plugin_action_links' ) );
+		add_action( 'admin_post_fqp_check_updates', array( __CLASS__, 'check_updates_now' ) );
+		add_action( 'admin_notices', array( __CLASS__, 'checked_notice' ) );
+	}
+
+	public static function plugin_action_links( array $links ): array {
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			return $links;
+		}
+
+		$url = wp_nonce_url(
+			admin_url( 'admin-post.php?action=fqp_check_updates' ),
+			'fqp_check_updates'
+		);
+
+		array_unshift(
+			$links,
+			'<a href="' . esc_url( $url ) . '">' . esc_html__( 'Check for updates', 'frpsych-quantity-pricing' ) . '</a>'
+		);
+
+		return $links;
+	}
+
+	public static function check_updates_now(): void {
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			wp_die( esc_html__( 'You do not have permission to check plugin updates.', 'frpsych-quantity-pricing' ) );
+		}
+
+		check_admin_referer( 'fqp_check_updates' );
+		delete_site_transient( self::CACHE_KEY );
+		delete_site_transient( 'update_plugins' );
+
+		if ( function_exists( 'wp_update_plugins' ) ) {
+			wp_update_plugins();
+		}
+
+		wp_safe_redirect( add_query_arg( 'fqp_update_checked', '1', admin_url( 'plugins.php' ) ) );
+		exit;
+	}
+
+	public static function checked_notice(): void {
+		if ( ! is_admin() || empty( $_GET['fqp_update_checked'] ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			return;
+		}
+
+		echo '<div class="notice notice-info is-dismissible"><p>' . esc_html__( 'Plugin updates checked. If a newer GitHub Release exists, it will appear below.', 'frpsych-quantity-pricing' ) . '</p></div>';
 	}
 
 	public static function check_for_update( object $transient ): object {
