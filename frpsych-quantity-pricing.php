@@ -21,7 +21,7 @@ define( 'FQP_PLUGIN_FILE', __FILE__ );
 define( 'FQP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'FQP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'FQP_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'FQP_GITHUB_REPOSITORY', 'USERNAME/discountFlow-for-WooCommerce' );
+define( 'FQP_GITHUB_REPOSITORY', 'phamdinhtri123/discountFlow-for-WooCommerce' );
 define( 'FQP_GITHUB_API_URL', 'https://api.github.com/repos/' . FQP_GITHUB_REPOSITORY . '/releases/latest' );
 
 add_action(
