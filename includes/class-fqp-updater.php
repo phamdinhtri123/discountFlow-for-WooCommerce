@@ -110,7 +110,7 @@ final class FQP_Updater {
 			'name'          => 'DiscountFlow for WooCommerce',
 			'slug'          => self::SLUG,
 			'version'       => $release['version'],
-			'author'        => 'FRPSYCH',
+			'author'        => 'Seamkt',
 			'homepage'      => $release['html_url'] ?? 'https://github.com/' . FQP_GITHUB_REPOSITORY,
 			'requires'      => '6.5',
 			'requires_php'  => '8.1',

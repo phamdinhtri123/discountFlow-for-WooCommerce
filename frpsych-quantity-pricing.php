@@ -3,8 +3,8 @@
  * Plugin Name: DiscountFlow for WooCommerce
  * Plugin URI: https://github.com/USERNAME/discountFlow-for-WooCommerce
  * Description: Per-product quantity-based tier pricing for WooCommerce products and variations.
- * Version: 1.0.1
- * Author: FRPSYCH
+ * Version: 1.0.2
+ * Author: Seamkt
  * Requires at least: 6.5
  * Requires PHP: 8.1
  * WC requires at least: 9.0
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'FQP_VERSION', '1.0.1' );
+define( 'FQP_VERSION', '1.0.2' );
 define( 'FQP_PLUGIN_FILE', __FILE__ );
 define( 'FQP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'FQP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -78,7 +78,7 @@ final class FQP_Plugin {
 		}
 
 		echo '<div class="notice notice-error"><p>';
-		echo esc_html__( 'FRPSYCH Quantity Pricing requires WooCommerce to be installed and active.', 'frpsych-quantity-pricing' );
+		echo esc_html__( 'DiscountFlow for WooCommerce requires WooCommerce to be installed and active.', 'frpsych-quantity-pricing' );
 		echo '</p></div>';
 	}
 }

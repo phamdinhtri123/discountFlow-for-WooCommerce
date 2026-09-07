@@ -134,7 +134,14 @@ final class FQP_Frontend {
 
 	public static function shortcode( array $atts = array() ): string {
 		$atts = shortcode_atts( array( 'product_id' => 0 ), $atts, 'fqp_pricing_table' );
-		$product = absint( $atts['product_id'] ) ? wc_get_product( absint( $atts['product_id'] ) ) : wc_get_product( get_the_ID() );
+		global $product, $post;
+
+		$product_id = absint( $atts['product_id'] );
+		if ( $product_id > 0 ) {
+			$product = wc_get_product( $product_id );
+		} elseif ( ! $product instanceof WC_Product ) {
+			$product = isset( $post->ID ) ? wc_get_product( absint( $post->ID ) ) : false;
+		}
 
 		if ( ! $product instanceof WC_Product ) {
 			return '';
