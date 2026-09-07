@@ -73,7 +73,7 @@ final class FQP_Frontend {
 		);
 	}
 
-	public static function render_pricing_table( ?WC_Product $target_product = null ): void {
+	public static function render_pricing_table( ?WC_Product $target_product = null, bool $force = false ): void {
 		global $product;
 		$product = $target_product instanceof WC_Product ? $target_product : $product;
 
@@ -82,7 +82,7 @@ final class FQP_Frontend {
 		}
 
 		$product_id = $product->get_id();
-		if ( isset( self::$rendered[ $product_id ] ) ) {
+		if ( ! $force && isset( self::$rendered[ $product_id ] ) ) {
 			return;
 		}
 		if ( ! self::product_has_rules( $product ) ) {
@@ -148,7 +148,7 @@ final class FQP_Frontend {
 		}
 
 		ob_start();
-		self::render_pricing_table( $product );
+		self::render_pricing_table( $product, true );
 		return (string) ob_get_clean();
 	}
 

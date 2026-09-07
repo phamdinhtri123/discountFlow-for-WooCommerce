@@ -4,7 +4,7 @@ Tags: woocommerce, quantity pricing, bulk discounts, variable products
 Requires at least: 6.5
 Tested up to: 6.6
 Requires PHP: 8.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 
 Per-product quantity-based tier pricing for WooCommerce.
@@ -24,7 +24,7 @@ DiscountFlow for WooCommerce adds configurable quantity discount tiers to WooCom
 
 == GitHub Update Workflow ==
 
-Current plugin version: 1.0.2
+Current plugin version: 1.0.3
 
 For a new release:
 
@@ -32,7 +32,7 @@ For a new release:
 2. Update FQP_VERSION in frpsych-quantity-pricing.php.
 3. Update this readme changelog.
 4. Commit and push to GitHub.
-5. Create a GitHub tag such as v1.0.2.
+5. Create a GitHub tag such as v1.0.3.
 6. Create a GitHub Release.
 7. Build discountFlow-for-WooCommerce.zip.
 8. Attach discountFlow-for-WooCommerce.zip to the release.
@@ -44,6 +44,9 @@ The ZIP should contain the top-level DiscountFlow for WooCommerce folder directl
 Existing product settings are stored as product meta and are not deleted during normal plugin updates.
 
 == Changelog ==
+
+= 1.0.3 =
+Improved Quickview shortcode rendering for products with pricing tables already rendered elsewhere on the page.
 
 = 1.0.2 =
 Added Quickview shortcode support, manual update checking, improved tier validation, and Seamkt plugin branding.
