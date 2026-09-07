@@ -1,0 +1,77 @@
+.fqp-pricing-box {
+	background: #fff;
+	border: 2px solid var(--fqp-primary, #0D405A);
+	border-radius: var(--fqp-radius, 18px);
+	box-sizing: border-box;
+	margin: 18px 0;
+	max-width: 550px;
+	overflow: hidden;
+	width: 100%;
+}
+
+.fqp-heading {
+	color: var(--fqp-primary, #0D405A);
+	font-size: 1.15rem;
+	font-weight: 700;
+	letter-spacing: 0;
+	margin: 0;
+	padding: 16px 18px 4px;
+}
+
+.fqp-description {
+	margin: 0;
+	padding: 0 18px 12px;
+}
+
+.fqp-pricing-table {
+	border-collapse: collapse;
+	margin: 0;
+	width: 100%;
+}
+
+.fqp-pricing-table th,
+.fqp-pricing-table td {
+	border-top: 1px solid rgba(13, 64, 90, 0.18);
+	padding: 12px 14px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.fqp-pricing-table th {
+	color: var(--fqp-primary, #0D405A);
+	font-weight: 700;
+}
+
+.fqp-pricing-table tbody tr.is-active {
+	background: var(--fqp-primary, #0D405A);
+	color: #fff;
+}
+
+.fqp-no-active .fqp-pricing-table tbody tr.is-active {
+	background: transparent;
+	color: inherit;
+}
+
+.fqp-live-summary {
+	border-top: 1px solid rgba(13, 64, 90, 0.18);
+	display: grid;
+	gap: 6px;
+	padding: 14px 18px 16px;
+}
+
+.fqp-live-summary strong,
+.fqp-savings-row {
+	color: var(--fqp-primary, #0D405A);
+}
+
+@media (max-width: 480px) {
+	.fqp-heading {
+		font-size: 1rem;
+	}
+
+	.fqp-pricing-table th,
+	.fqp-pricing-table td {
+		font-size: 0.9rem;
+		padding: 10px 8px;
+	}
+}

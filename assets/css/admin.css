@@ -1,0 +1,47 @@
+.fqp-admin-box {
+	padding: 14px 12px 18px;
+}
+
+.fqp-repeater-wrap,
+.fqp-display-options,
+.fqp-preview {
+	clear: both;
+	margin: 16px 12px;
+}
+
+.fqp-tier-table input[type="number"] {
+	width: 100%;
+	max-width: 120px;
+}
+
+.fqp-handle-col {
+	width: 34px;
+}
+
+.fqp-handle {
+	color: #777;
+	cursor: move;
+	font-weight: 700;
+	text-align: center;
+	width: 34px;
+}
+
+.fqp-tier-row[draggable="true"] {
+	user-select: none;
+}
+
+.fqp-preview {
+	background: #f6f7f7;
+	border-left: 4px solid #0D405A;
+	padding: 8px 12px;
+}
+
+.fqp-preview p {
+	margin: 4px 0;
+}
+
+.fqp-variation-panel {
+	border-top: 1px solid #ddd;
+	margin-top: 12px;
+	padding-top: 10px;
+}
